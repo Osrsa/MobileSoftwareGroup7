@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Mobile_Software_Project_7</string>
+    <string name="restaurant1">상록원 1층</string>
+    <string name="restaurant2">상록원 2층</string>
+    <string name="restaurant3">남산학사 카페</string>
+    <string name="input_food">음식입력</string>
+    <string name="sidedish_input">반찬입력</string>
+    <string name="savebutton">저장하기</string>
+    <string name="input_time">시간입력</string>
+    <string name="input_price">비용입력</string>
+    <string name="input_story">음식소감</string>
+</resources>
