@@ -31,4 +31,9 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(RESTAURANT_NAME, "남산학사 카페");
         startActivity(intent);
     }
+
+    public void DisplayButtonClick(View view){
+        Intent intent = new Intent(this, FoodDisplayActivity.class);
+        startActivity(intent);
+    }
 }

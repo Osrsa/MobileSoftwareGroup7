@@ -56,4 +56,15 @@
             android:onClick="restaurant2ButtonClick"
             android:text="@string/restaurant2" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="210dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="100dp"
+        android:onClick="DisplayButtonClick"
+        android:text="@string/Display_button"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="100dp"
+        tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>

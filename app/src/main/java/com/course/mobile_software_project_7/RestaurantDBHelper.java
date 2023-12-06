@@ -1,6 +1,7 @@
 package com.course.mobile_software_project_7;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -24,6 +25,19 @@ public class RestaurantDBHelper extends SQLiteOpenHelper {
                 RestaurantContract.MenuEntry.COLUMN_NAME_RESTAURANT_LOCATION + " TEXT);";
 
         db.execSQL(SQL_CREATE_MENU_TABLE);
+    }
+
+    public Cursor readAllMeals() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(
+                RestaurantContract.MenuEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
     }
 
     @Override
