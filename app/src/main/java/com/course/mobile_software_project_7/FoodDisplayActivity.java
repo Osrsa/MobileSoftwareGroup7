@@ -1,6 +1,7 @@
 package com.course.mobile_software_project_7;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -32,7 +33,7 @@ public class FoodDisplayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_display);
 
-        checkAndRequestPermissions();
+        //checkAndRequestPermissions();
 
         listViewMeals = findViewById(R.id.listViewFood);
         dbHelper = new RestaurantDBHelper(this);
@@ -40,6 +41,15 @@ public class FoodDisplayActivity extends AppCompatActivity {
         Cursor cursor = dbHelper.readAllMeals();
         mealAdapter = new MealCursorAdapter(this, cursor);
         listViewMeals.setAdapter(mealAdapter);
+
+        ImageView imageViewCalendar = findViewById(R.id.calendar);
+        imageViewCalendar.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FoodDisplayActivity.this, CalenderActivity.class);
+                startActivity(intent);
+            }
+        });
 
         listViewMeals.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -49,7 +59,10 @@ public class FoodDisplayActivity extends AppCompatActivity {
                     // 권한이 있는 경우, 이미지 로드 로직
                     loadMealDetails(position);
                 } else {
-                    Toast.makeText(FoodDisplayActivity.this, "저장소 읽기 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(FoodDisplayActivity.this, "저장소 읽기 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
+                    ActivityCompat.requestPermissions(FoodDisplayActivity.this,
+                            new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                            PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
                 }
             }
         });
@@ -99,9 +112,13 @@ public class FoodDisplayActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // 권한이 부여된 경우
                 Toast.makeText(this, "권한이 부여되었습니다.", Toast.LENGTH_SHORT).show();
+                int selectedItemPosition = listViewMeals.getSelectedItemPosition();
+                if (selectedItemPosition != ListView.INVALID_POSITION) {
+                    loadMealDetails(selectedItemPosition);
+                }
             } else {
                 // 권한이 거부된 경우
-                Toast.makeText(this, "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "권한이 필요합니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }

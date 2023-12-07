@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RestaurantDBHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "Restaurant.db";
@@ -38,6 +41,44 @@ public class RestaurantDBHelper extends SQLiteOpenHelper {
                 null,
                 null
         );
+    }
+
+    public List<String> getMealsForDate(String selectedDate) {
+        List<String> mealList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = {
+                RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_NAME,
+                RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_TIME
+        };
+
+        String selection = RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_TIME + " LIKE ?";
+        String[] selectionArgs = { selectedDate + "%" };
+
+        Cursor cursor = db.query(
+                RestaurantContract.MenuEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                String mealName = cursor.getString(cursor.getColumnIndexOrThrow(RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_NAME));
+                String mealTime = cursor.getString(cursor.getColumnIndexOrThrow(RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_TIME));
+
+                // Format the meal information
+                String mealInfo = "메뉴: " + mealName + ", 날짜: " + mealTime;
+                mealList.add(mealInfo);
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return mealList;
     }
 
     @Override
