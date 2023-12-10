@@ -25,7 +25,8 @@ public class RestaurantDBHelper extends SQLiteOpenHelper {
                 RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_PRICE + " TEXT NOT NULL, " +
                 RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_REVIEW + " TEXT, " +
                 RestaurantContract.MenuEntry.COLUMN_NAME_IMAGE_URL + " TEXT, " +
-                RestaurantContract.MenuEntry.COLUMN_NAME_RESTAURANT_LOCATION + " TEXT);";
+                RestaurantContract.MenuEntry.COLUMN_NAME_RESTAURANT_LOCATION + " TEXT, " +
+                RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_CALORIES + " INTEGER);";
 
         db.execSQL(SQL_CREATE_MENU_TABLE);
     }
