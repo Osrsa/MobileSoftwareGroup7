@@ -79,9 +79,9 @@ public class CalenderActivity extends AppCompatActivity {
                 "SELECT SUM(food_price) as TotalPrice, " +
                         "SUM(CASE WHEN calories IS NOT NULL THEN calories ELSE (RANDOM() % 3001 + 2000) / 100.0 END) as TotalCalories, " +
                         "CASE " +
-                        "WHEN substr(food_time, 1, 2) < '10' THEN '조식' " +
-                        "WHEN substr(food_time, 1, 2) >= '10' AND substr(food_time, 1, 2) < '15' THEN '중식' " +
-                        "WHEN substr(food_time, 1, 2) >= '15' THEN '석식' " +
+                        "WHEN substr(food_time, 12, 2) < '10' THEN '조식' " +
+                        "WHEN substr(food_time, 12, 2) >= '10' AND substr(food_time, 12, 2) < '15' THEN '중식' " +
+                        "WHEN substr(food_time, 12, 2) >= '15' THEN '석식' " +
                         "END as MealType " +
                         "FROM menu " +
                         "WHERE food_time >= ? " +
