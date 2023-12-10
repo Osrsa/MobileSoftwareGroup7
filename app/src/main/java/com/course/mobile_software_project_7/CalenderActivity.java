@@ -75,9 +75,9 @@ public class CalenderActivity extends AppCompatActivity {
         String oneMonthAgo = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        //Cursor cursor = db.rawQuery("SELECT SUM(price) as TotalPrice, type FROM menu WHERE date >= ? GROUP BY type", new String[]{oneMonthAgo});
         Cursor cursor = db.rawQuery(
                 "SELECT SUM(food_price) as TotalPrice, " +
+                        "SUM(CASE WHEN calories IS NOT NULL THEN calories ELSE (RANDOM() % 3001 + 2000) / 100.0 END) as TotalCalories, " +
                         "CASE " +
                         "WHEN substr(food_time, 1, 2) < '10' THEN '조식' " +
                         "WHEN substr(food_time, 1, 2) >= '10' AND substr(food_time, 1, 2) < '15' THEN '중식' " +
@@ -91,17 +91,18 @@ public class CalenderActivity extends AppCompatActivity {
 
         StringBuilder analysisResult = new StringBuilder();
         int totalPrice = 0;
-
-        int priceColumnIndex = cursor.getColumnIndex("TotalPrice");
-        int typeColumnIndex = cursor.getColumnIndex("type");
+        double totalCalories = 0;
 
         while (cursor.moveToNext()) {
             int price = cursor.getInt(cursor.getColumnIndexOrThrow("TotalPrice"));
+            double calories = cursor.getDouble(cursor.getColumnIndexOrThrow("TotalCalories"));
             String mealType = cursor.getString(cursor.getColumnIndexOrThrow("MealType"));
 
             totalPrice += price;
+            totalCalories += calories;
+
             analysisResult.append(String.format(Locale.getDefault(),
-                    "식사 유형: %s\n비용: %d원\n\n", mealType, price));
+                    "식사 유형: %s\n비용: %d원\n칼로리: %.2f kcal\n\n", mealType, price, calories));
         }
 
         cursor.close();
@@ -109,11 +110,15 @@ public class CalenderActivity extends AppCompatActivity {
 
         // AlertDialog를 생성하고 결과를 보여줌
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("최근 1달 간의 식사 비용");
-        builder.setMessage("총 비용: " + totalPrice + "\n\n" + analysisResult);
-        builder.setPositiveButton("OK", null);
+        builder.setTitle("최근 1달 간의 식사 분석");
+        builder.setMessage("총 비용: " + totalPrice + "원\n총 칼로리: " + String.format("%.2f", totalCalories) + " kcal\n\n" + analysisResult);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         builder.show();
     }
-
 
 }

@@ -55,15 +55,15 @@ public class FoodDisplayActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 권한 확인
-                //if (ContextCompat.checkSelfPermission(FoodDisplayActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(FoodDisplayActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있는 경우, 이미지 로드 로직
                     loadMealDetails(position);
-                //} else {
+                } else {
                     //Toast.makeText(FoodDisplayActivity.this, "저장소 읽기 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
                     ActivityCompat.requestPermissions(FoodDisplayActivity.this,
                             new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
                             PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                //}
+                }
             }
         });
     }

@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Random;
+
 public class FoodInputActivity extends AppCompatActivity{
     private EditText editTextFoodName;
     private EditText editTextTime;
@@ -92,6 +94,7 @@ public class FoodInputActivity extends AppCompatActivity{
         String foodPrice = editTextPrice.getText().toString().trim();
         String foodReview = editTextReview.getText().toString().trim();
         String restaurantLocation = textViewRestaurantName.getText().toString().trim();
+        double calories = (new Random().nextInt(3001) + 2000);
 
         // 데이터베이스에 음식 정보를 저장하는 코드
         ContentValues values = new ContentValues();
@@ -99,17 +102,16 @@ public class FoodInputActivity extends AppCompatActivity{
         values.put(RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_TIME, foodTime);
         values.put(RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_PRICE, foodPrice);
         values.put(RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_REVIEW, foodReview);
-        values.put(RestaurantContract.MenuEntry.COLUMN_NAME_IMAGE_URL, ImagePath);
+        if (ImagePath != "")
+            values.put(RestaurantContract.MenuEntry.COLUMN_NAME_IMAGE_URL, ImagePath);
         values.put(RestaurantContract.MenuEntry.COLUMN_NAME_RESTAURANT_LOCATION, restaurantLocation);
-
-        // 다른 필요한 열들도 추가
+        values.put(RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_CALORIES, calories);
 
         // 실제 데이터베이스에 데이터 추가
         long newRowId = database.insert(RestaurantContract.MenuEntry.TABLE_NAME, null, values);
 
         if (newRowId != -1) {
             Toast.makeText(this, "음식 정보가 저장되었습니다.", Toast.LENGTH_SHORT).show();
-            // 저장 후 다른 작업 수행 가능
         } else {
             Toast.makeText(this, "음식 정보 저장에 실패했습니다.", Toast.LENGTH_SHORT).show();
         }
@@ -119,7 +121,7 @@ public class FoodInputActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         if (database != null) {
-            database.close(); // 데이터베이스 연결 종료
+            database.close();
         }
     }
 

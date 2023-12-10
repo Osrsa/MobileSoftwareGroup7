@@ -13,7 +13,7 @@ public class RestaurantDBHelper extends SQLiteOpenHelper {
     static final String DATABASE_NAME = "Restaurant.db";
 
     public RestaurantDBHelper(Context context){
-        super(context, DATABASE_NAME, null, 2);
+        super(context, DATABASE_NAME, null, 3);
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -72,7 +72,7 @@ public class RestaurantDBHelper extends SQLiteOpenHelper {
                 String mealTime = cursor.getString(cursor.getColumnIndexOrThrow(RestaurantContract.MenuEntry.COLUMN_NAME_FOOD_TIME));
 
                 // Format the meal information
-                String mealInfo = "메뉴: " + mealName + ", 날짜: " + mealTime;
+                String mealInfo = "메뉴: " + mealName + "\n날짜: " + mealTime;
                 mealList.add(mealInfo);
             } while (cursor.moveToNext());
 
